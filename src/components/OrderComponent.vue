@@ -1,34 +1,53 @@
 <template>
   <main class="main">
   <h1 class="order">Your Orders</h1>
-  <div class="card-container">
+  <div class="card-container" v-if="isLoggedIn">
     <div v-for="product in products" class="card" :key="product.productId" @click="routeMeTo(product.productId)">
-      <img :src="product.productImageURL[0]" alt="Image 1" />
-      <!-- <img v-for="(img,index) in Product.productImageURL" :src="img" :key="index" > -->
-
+      <img :src="product.productImageURL?.[0]" alt="Image" />
       <div class="card-content">
         <h3 class="oneline">{{ product.productName }}</h3>
-        <p class="price">Rs: {{ product.productName  }}</p>
-        <p>Order Status:</p>
-        <P>Quantity:</P>
-        <p>Total Price:{{ 3*4 }}</p>
-
+        <p class="price">Rs: {{ product.totalPrice }}</p>
+        <p>Order Status:{{ product.Ostatus || " Ordered" }}</p>
+        <p>Quantity: {{ product.quantity }}</p>
       </div>
     </div>
+  </div>
+  <div v-else class="min-h">
+    <h3>Please login first</h3>
   </div>
 </main>
 </template>
 
 <script>
 import router from "@/router";
-import { computed, defineComponent } from "vue";
+import { computed, defineComponent, onBeforeMount, watch } from "vue";
 import useProductRootStore from "@/store/ProductStore";
-
+import useAuthStore from "@/store/auth-store.js";
+import useOrderService from "@/store/order-store";
 export default defineComponent({
   setup() {
     const rootStore = useProductRootStore();
+    const authStore = useAuthStore();
+    const orderStore = useOrderService();
+    rootStore.FETCH_PRODUCTS();
+    const allProducts = computed(() => rootStore.products)
+    const products = computed(() => orderStore.order)
+    const isLoggedIn = computed(() => authStore.userID.length > 0)
     rootStore.FETCH_PRODUCTS()
-    const products = computed(() => rootStore.products)
+
+    watch(allProducts, () => {
+      if (isLoggedIn.value && allProducts.value?.length > 0) {
+        orderStore.FETCH_ORDER(authStore.userID);
+      }
+    })
+    watch(products, () => {
+      console.log(products.value)
+    })
+    onBeforeMount(() => {
+      if (authStore.userID.length > 0) {
+        orderStore.FETCH_ORDER(authStore.userID);
+      }
+    })
     const routeMeTo = (productId) => {
       router.push(`/product/${productId}`);
     };
@@ -36,13 +55,13 @@ export default defineComponent({
     return {
       routeMeTo,
       products,
+      isLoggedIn
     };
   },
 });
 </script>
 
 <style scoped>
-
 .main{
   margin-top: 85px;
 }
@@ -53,9 +72,18 @@ export default defineComponent({
   gap: 25px;
  
   margin-top: 20px;
- 
+
 }
 
+.min-h {
+  height: 70vh;
+}
+
+.oneline {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
 
 .card {
   height: 285px;
@@ -67,7 +95,7 @@ export default defineComponent({
   margin-bottom: 20px;
   box-sizing: border-box;
   cursor: pointer;
-  
+
 }
 
 .card img {

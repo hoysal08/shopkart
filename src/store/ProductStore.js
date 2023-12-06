@@ -9,39 +9,36 @@ export const useProductRootStore = defineStore("productRoot", () => {
   const productsOfFashion = ref([]);
 
   const FETCH_PRODUCTS = async () => {
-    const res = await fetch("http://10.20.3.164:8099/api/products/all");
+    const res = await fetch("http://localhost:8099/api/products/all");
     const jsonnew = await res.json();
     products.value = jsonnew;
   };
   const FETCH_ELECRONICS_PRODUCTS = async () => {
     const res = await fetch(
-      "http://10.20.3.164:8099/api/products/by-category/Electronics"
+      "http://localhost:8099/api/products/by-category/Electronics"
     );
     const jsonnew = await res.json();
     productsOfElectronics.value = jsonnew;
   };
   const FETCH_BOOKS_PRODUCTS = async () => {
     const res = await fetch(
-      "http://10.20.3.164:8099/api/products/by-category/Books"
+      "http://localhost:8099/api/products/by-category/Books"
     );
     const jsonnew = await res.json();
     productsOfBooks.value = jsonnew;
   };
   const FETCH_FASHION_PRODUCTS = async () => {
     const res = await fetch(
-      "http://10.20.3.164:8099/api/products/by-category/Fashion"
+      "http://localhost:8099/api/products/by-category/Fashion"
     );
     const jsonnew = await res.json();
     productsOfFashion.value = jsonnew;
   };
 
   const FETCH_PRODUCT_BY_ID = async (productId) => {
-    const res = await fetch(
-      `http://10.20.3.164:8099/api/products/${productId}`
-    );
+    const res = await fetch(`http://localhost:8099/api/products/${productId}`);
     const jsonnew = await res.json();
     LastesProductById.value = { ...jsonnew };
-    // console.log(LastesProductById.value);
   };
 
   return {
@@ -56,5 +53,19 @@ export const useProductRootStore = defineStore("productRoot", () => {
     productsOfElectronics,
     productsOfFashion,
   };
+
+  // const ADD_PRODUCT_REVIEWS = async (review, userId) => {
+  //   const options = {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify(OrderItem),
+  //   };
+
+  //   const res = await fetch(
+  //     `http://localhost:8099/api/products/${productId}/add-review`
+  //   );
+  // };
 });
 export default useProductRootStore;

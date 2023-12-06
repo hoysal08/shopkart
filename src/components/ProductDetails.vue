@@ -12,7 +12,6 @@
           Hurry up! only {{ totalStock || 0 }} product left in stock!
         </h3>
         <h3>Rating : {{ review }} / 5</h3>
-        <!-- <h3>Price {{ selectedOption?.price }}</h3> -->
       </div>
       <div>
         <hr />
@@ -43,13 +42,12 @@
           </div>
         </div>
       </div>
-      <div class="merchant">
-        <div></div>
-        <div></div>
-      </div>
       <div>
         <hr />
       </div>
+      <div>
+        <a @click="addToCart" class="cart-btn-add">Add to cart</a>
+        <a @click="buyNow" class="cart-btn-buy">Buy it Now</a>
       <div class="cart-div">
         <a href="#" class="cart-btn-add">Add to cart</a>
         <a href="#" class="cart-btn-buy">Buy it Now</a>
@@ -59,7 +57,10 @@
   <div class="review-container">
     <h2>Customer review</h2>
     <p>No review Yet</p>
-    <div>Write a review</div>
+    <!-- <div>
+      <input placeholder="Write a review" type="text" class="reviewInput">
+      <button class="review-submit">Submit</button>
+    </div> -->
   </div>
 </div>
 </template>
@@ -70,17 +71,23 @@
 import { computed, defineComponent, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import useProductRootStore from "@/store/ProductStore";
-
-
+import useAuthStore from "@/store/auth-store.js";
+import { useRouter } from 'vue-router'
+import useCartStore from '@/store/cart-store';
+import useOrderService from "@/store/order-store";
 
 export default defineComponent({
   setup() {
-
-
     const rootStore = useProductRootStore();
-    const route = useRoute()
+    const authStore = useAuthStore();
+    const orderStore = useOrderService();
+    const route = useRoute();
+    const router = useRouter();
+    const cartStore = useCartStore();
+
     const id = ref(0);
-    id.value = route.params.id
+    id.value = route.params.id;
+
     rootStore.FETCH_PRODUCT_BY_ID(id.value)
     const Product = computed(() => rootStore.LastesProductById.value);
     const totalStock = computed(() => Product.value.skus?.reduce((total, sku) => total + sku.stock, 0));
@@ -90,29 +97,72 @@ export default defineComponent({
       return skus.value.map(() => getRandomNumberWithTwoDecimals())
     })
     const selectedOption = ref(null)
-    function getRandomNumberWithTwoDecimals() {
+    const getRandomNumberWithTwoDecimals = () => {
       const min = 3;
       const max = 5;
       const randomNumber = Math.random() * (max - min) + min;
       const roundedNumber = Math.round(randomNumber * 100) / 100;
       return roundedNumber;
     }
+
+    const addToCart = async () => {
+      if (authStore.userJWT.length > 0) {
+        try {
+          const cartItemDTO = {
+            productId: id.value,
+            merchantId: selectedOption.value.mid,
+            quantity: 1,
+            price: selectedOption.value.price
+          }
+          await cartStore.CREATE_OR_ADD_TO_CART_POST(cartItemDTO, authStore.userID)
+          alert("Succefully, added cart")
+        }
+        catch (e) {
+          console.log(e);
+        }
+      }
+      else {
+        router.push("/login")
+      }
+
+    }
+
+    const buyNow = async () => {
+      if (authStore.userJWT.length > 0) {
+        const OrderItemDTO = {
+          merchantId: selectedOption.value.mid,
+          productId: id.value,
+          userId: authStore.userID,
+          oStatus: "Ordered",
+          quantity: 1,
+          totalPrice: selectedOption.value.price
+        }
+        const payload = [OrderItemDTO]
+        await orderStore.ADD_ORDER(payload);
+        alert("Order Place succefully")
+      }
+      else {
+        router.push("/login")
+      }
+    }
+
     watch(skus, () => {
       if (selectedOption.value === null) {
+        console.log(Product)
         selectedOption.value = skus?.value?.[0]
       }
     })
 
     return {
-      // product
       Product,
       totalStock,
       getRandomNumberWithTwoDecimals,
       skus,
       selectedOption,
       review,
-      reviews
-
+      reviews,
+      addToCart,
+      buyNow
     };
   },
 });
@@ -127,6 +177,26 @@ export default defineComponent({
   flex-wrap: wrap;
   justify-content: space-evenly;
 
+}
+
+.reviewInput {
+  width: 85%;
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.review-submit {
+  width: 10%;
+  margin: auto 0.2rem;
+  display: inline-block;
+  background-color: #010101;
+  border-radius: 20px;
+  font-size: 16px;
+  color: #ffffff;
+  text-decoration: none;
+  padding: 12px 30px;
+  transition: all 0.5s;
+  cursor: pointer;
 }
 
 .left-column {
@@ -211,6 +281,7 @@ export default defineComponent({
   text-decoration: none;
   padding: 12px 30px;
   transition: all 0.5s;
+  cursor: pointer;
   text-align: center;
 }
 
@@ -224,8 +295,8 @@ export default defineComponent({
   padding: 12px 30px;
   transition: all 0.5s;
   margin-left: 10%;
+  cursor: pointer;
   text-align: center;
-  
 }
 
 .cart-btn-add:hover {

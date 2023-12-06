@@ -6,6 +6,7 @@ export const useAuthStore = defineStore("auth", () => {
     registerStatus: { value: {} },
   });
   const userJWT = ref(sessionStorage.getItem("jwtToken") || "");
+  const userID = ref(sessionStorage.getItem("userId") || "")
 
   const loginUser = async (userCredentials) => {
     try {
@@ -17,7 +18,7 @@ export const useAuthStore = defineStore("auth", () => {
         body: JSON.stringify(userCredentials),
       };
 
-      const res = await fetch("http://10.20.3.72:8051/api/auth/login", options);
+      const res = await fetch("http://localhost:8051/api/auth/login", options);
 
       if (!res.ok) {
         console.error("Error during login:", res.status);
@@ -45,7 +46,7 @@ export const useAuthStore = defineStore("auth", () => {
       };
 
       const res = await fetch(
-        "http://10.20.3.72:8051/api/users/register",
+        "http://localhost:8051/api/users/register",
         options
       );
       const jsonResult = await res.json();
@@ -68,6 +69,7 @@ export const useAuthStore = defineStore("auth", () => {
     registerUser,
     loginUser,
     userJWT,
+    userID
   };
 });
 
