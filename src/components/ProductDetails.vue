@@ -50,17 +50,18 @@
       <div>
         <hr />
       </div>
-      <div>
+      <div class="cart-div">
         <a href="#" class="cart-btn-add">Add to cart</a>
         <a href="#" class="cart-btn-buy">Buy it Now</a>
       </div>
     </div>
-  </div>
+ 
   <div class="review-container">
     <h2>Customer review</h2>
     <p>No review Yet</p>
     <div>Write a review</div>
   </div>
+</div>
 </template>
 
 
@@ -121,7 +122,7 @@ export default defineComponent({
 .container {
   display: flex;
   justify-content: space-around;
-  margin-top: 4%;
+  margin-top: 90px;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
@@ -210,6 +211,7 @@ export default defineComponent({
   text-decoration: none;
   padding: 12px 30px;
   transition: all 0.5s;
+  text-align: center;
 }
 
 .cart-btn-buy {
@@ -222,6 +224,8 @@ export default defineComponent({
   padding: 12px 30px;
   transition: all 0.5s;
   margin-left: 10%;
+  text-align: center;
+  
 }
 
 .cart-btn-add:hover {
@@ -248,11 +252,11 @@ export default defineComponent({
 @media screen and (min-width: 360px) and (max-width: 900px) {
   .container {
     display: flex;
-
+   margin-bottom: 5%;
     flex-direction: column;
     align-items: center;
     margin-bottom: 25px;
-    margin-left: 8px;
+    
   }
 
   .left-column {
@@ -272,14 +276,31 @@ export default defineComponent({
   }
 
   .review-container {
-    margin: auto;
+    margin-top: 85%;
+
     border-radius: 25px;
     border: 2px solid #8e918e;
-
+    margin-left: -15px;
     padding: 20px;
     /* margin-left: 8px; */
-    width: 315px;
+    width: 261px;
   }
+  .cart-div{
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+   
+  }
+  .cart-btn-add {
+  margin-top: 10px;
+  width: 200px;
+}
+
+.cart-btn-buy {
+  margin-top: 10px;
+  width: 200px;
+  margin-left: 0;
+}
 }
 </style>
    
