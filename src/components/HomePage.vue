@@ -59,7 +59,7 @@
     margin-top: 4rem;
 }
 
-.hero-card-cnt {
+.hero-card-cnt{
     display: flex;
     justify-content: center;
     align-items: flex-end;
@@ -89,6 +89,16 @@
 }
 @media screen and (min-width: 360px) and (max-width: 900px) {
    
+    .hero-card-cnt {
+        display: flex;
+    margin-top: 1rem;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+}
+
+
+
     .hero-cnt-title {
     padding: 2rem;
 }

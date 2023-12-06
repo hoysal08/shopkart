@@ -16,7 +16,7 @@ export const useCartStore = defineStore("cart", () => {
         body: JSON.stringify(cartItemsDto),
       };
 
-      const urlWithUserId = `http://localhost:8095/api/carts/update?userId=${userId}`;
+      const urlWithUserId = `http://10.20.3.72:8095/api/carts/update?userId=${userId}`;
       const res = await fetch(urlWithUserId, options);
       console.log(res);
       const jsonRes = await res.json();
@@ -36,7 +36,7 @@ export const useCartStore = defineStore("cart", () => {
       body: JSON.stringify(cartItemsDto),
     };
 
-    const urlWithUserId = `http://localhost:8095/api/carts/create?userId=${userId}`;
+    const urlWithUserId = `http://10.20.3.72:8095/api/carts/create?userId=${userId}`;
     const res = await fetch(urlWithUserId, options);
     const jsonRes = await res.json();
     createCart.value = { ...jsonRes };
@@ -45,7 +45,7 @@ export const useCartStore = defineStore("cart", () => {
   const getCartById = ref({ value: [] });
   const getProductsId = ref({ value: [] });
   const GET_CAR_BY_ID = async (userId) => {
-    const urlWithUserId = `http://localhost:8095/api/carts/${userId}`;
+    const urlWithUserId = `http://10.20.3.72:8095/api/carts/${userId}`;
     const res = await fetch(urlWithUserId);
     const jsonRes = await res.json();
     getCartById.value = jsonRes;
@@ -65,7 +65,7 @@ export const useCartStore = defineStore("cart", () => {
       body: JSON.stringify(cartItemsDto),
     };
 
-    const urlWithUserId = `http://localhost:8095/api/carts/createOrUpdate?userId=${userId}`;
+    const urlWithUserId = `http://10.20.3.72:8095/api/carts/createOrUpdate?userId=${userId}`;
     const res = await fetch(urlWithUserId, options);
     console.log(res);
   };
@@ -79,7 +79,7 @@ export const useCartStore = defineStore("cart", () => {
         },
       };
 
-      const urlWithCartId = `http://localhost:8095/api/carts/${userId}/${cartId}`;
+      const urlWithCartId = `http://10.20.3.72:8095/api/carts/${userId}/${cartId}`;
       const res = await fetch(urlWithCartId, options);
 
       if (res.ok) {

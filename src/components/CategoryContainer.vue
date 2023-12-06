@@ -59,4 +59,14 @@ export default defineComponent({
     align-items: flex-end;
     margin-top: 1rem;
 }
+@media screen and (min-width: 300px) and (max-width: 900px) {
+   
+   .hero-card-cnt {
+       display: flex;
+   margin-top: 1rem;
+   flex-direction: column;
+   flex-wrap: wrap;
+   align-content: center;
+}
+}
 </style>
