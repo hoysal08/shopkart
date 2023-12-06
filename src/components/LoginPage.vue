@@ -53,7 +53,6 @@ export default defineComponent({
           sessionStorage.setItem("userId", token.userId)
           authStore.userJWT = token.token
           authStore.userID = token.userId
-          alert("Login successful!");
           state.isLoggedIn = true;
           router.push('/')
 

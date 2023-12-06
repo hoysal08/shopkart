@@ -49,8 +49,6 @@ export default {
       if (result && result.error) {
         alert(result.error);
       } else {
-        alert("Register successful!");
-        // Redirect to another page or perform other actions after successful registration
         router.push('/login')
       }
     };

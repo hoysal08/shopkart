@@ -5,18 +5,12 @@
       <!-- <router-link to ="/">ShopKart</router-link> -->
     </div>
 
-    <div
-      :class="{
-        'search-cnt-loggedin': logedIn,
-        'search-cnt-loggedout': !logedIn,
-      }"
-    >
+    <div :class="{
+      'search-cnt-loggedin': logedIn,
+      'search-cnt-loggedout': !logedIn,
+    }">
       <div class="search">
-        <input
-          type="text"
-          class="search-input"
-          placeholder="Enter your need!"
-        />
+        <input type="text" class="search-input" placeholder="Enter your need!" v-model="searchInput" />
         <button class="search-button" @click="takeMeToSearch">Search</button>
       </div>
     </div>
@@ -50,7 +44,7 @@
 </template>
  
 <script>
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, ref } from "vue";
 import userIcon from "@/assets/userIcon.svg";
 import ordericon from "@/assets/ordericon.svg";
 import shopingcart from "@/assets/shopingcart.svg";
@@ -64,6 +58,7 @@ export default defineComponent({
       const token = sessionStorage.getItem("jwtToken");
       return token !== null && token.length !== 0;
     });
+    const searchInput = ref("")
     const logout = () => {
       sessionStorage.removeItem("jwtToken");
       isLoggedIn.value = false;
@@ -76,7 +71,12 @@ export default defineComponent({
       router.push("/orders");
     };
     const takeMeToSearch = () => {
-      router.push("/search");
+      router.push({
+        name: "search",
+        query: {
+          searchInput: searchInput.value
+        }
+      });
     };
     const takeMeToCart = () => {
       router.push("/cart");
@@ -103,6 +103,7 @@ export default defineComponent({
       takeMeToOrders,
       takeMeToSearch,
       takeMeToCart,
+      searchInput
     };
   },
 });
@@ -113,9 +114,10 @@ export default defineComponent({
   padding: auto;
 }
 
-.dropbtn{
-    display: none;
+.dropbtn {
+  display: none;
 }
+
 .search-cnt-loggedout {
   flex: 1;
   margin-right: 300px;
@@ -153,11 +155,13 @@ export default defineComponent({
 }
 
 .dropdown-content {
-   display: contents;
-  }
-  .dropdown{
-    display: flex;
-  }
+  display: contents;
+}
+
+.dropdown {
+  display: flex;
+}
+
 .flex {
   display: flex;
   justify-content: center;
@@ -233,9 +237,10 @@ export default defineComponent({
     margin-left: -20px;
   }
 
-  .dropbtn{
-    display:block;
-}
+  .dropbtn {
+    display: block;
+  }
+
   .dropbtn {
     background-color: #626262;
     color: white;
@@ -243,23 +248,24 @@ export default defineComponent({
     font-size: 16px;
     border: none;
     cursor: pointer;
-    margin-left:-10px;
+    margin-left: -10px;
   }
 
- .nav-cnt{
-    margin-left:-14px;
- } 
+  .nav-cnt {
+    margin-left: -14px;
+  }
+
   .dropdown {
     position: relative;
     display: inline-block;
-    
+
   }
 
   .dropdown-content {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
-    
+
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
     right: 0;
@@ -267,7 +273,7 @@ export default defineComponent({
 
   .dropdown:hover .dropdown-content {
     display: block;
-    
+
   }
 
   .dropdown:hover .dropbtn {

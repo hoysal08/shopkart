@@ -111,7 +111,6 @@ export default defineComponent({
             price: selectedOption.value.price
           }
           await cartStore.CREATE_OR_ADD_TO_CART_POST(cartItemDTO, authStore.userID)
-          alert("Succefully, added cart")
         }
         catch (e) {
           console.log(e);
@@ -135,7 +134,6 @@ export default defineComponent({
         }
         const payload = [OrderItemDTO]
         await orderStore.ADD_ORDER(payload);
-        alert("Order Place succefully")
       }
       else {
         router.push("/login")

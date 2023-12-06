@@ -121,7 +121,6 @@ export default {
 
             orderStore.ADD_ORDER(orderItemDto)
 
-            alert("order placed");
 
         })
 
