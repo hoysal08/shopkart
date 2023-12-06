@@ -1,4 +1,5 @@
 <template>
+  <main class="main">
   <h1 class="order">Your Orders</h1>
   <div class="card-container">
     <div v-for="product in products" class="card" :key="product.productId" @click="routeMeTo(product.productId)">
@@ -15,6 +16,7 @@
       </div>
     </div>
   </div>
+</main>
 </template>
 
 <script>
@@ -41,24 +43,22 @@ export default defineComponent({
 
 <style scoped>
 
+.main{
+  margin-top: 85px;
+}
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 20px;
-  margin-left: 5%;
-  margin-right: 5%;
+  justify-content: center;
+  gap: 25px;
+ 
   margin-top: 20px;
  
 }
-.oneline{
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
+
 
 .card {
-  height: 350px;
+  height: 285px;
   width: 190px;
   background-color: #ffffff;
   border-radius: 15px;

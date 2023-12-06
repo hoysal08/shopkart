@@ -125,9 +125,11 @@ export default {
   
 <style scoped>
 .cart-page {
+    margin: auto;
     max-width: 800px;
-    margin: 0 auto;
+    margin-top: 85px;
     padding: 20px;
+   
 }
 
 .empty-cart {
