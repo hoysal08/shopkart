@@ -1,80 +1,112 @@
 <!-- Login.vue -->
 <template>
   <div class="login">
-    <h2>Login</h2>
-    <form @submit.prevent="login" class="form-div">
-      <div>
-        <div class="email">
-          <label> Email: </label>
-          <input class="email-input" v-model="username" type="text" required />
-        </div>
-        <div class="password">
-          <label>Password: </label>
-          <input class="password-input" v-model="password" type="password" required />
-        </div>
-      </div>
-      <div>
-        <button class="button" type="submit"><span>Login </span></button>
-      </div>
-    </form>
+  <h2>Login</h2>
+  <form @submit.prevent="login" class="form-div">
+  <div>
+  <div class="email">
+  <label> Email : </label>
+  <input class="email-input" v-model="email" type="text" required />
+  <div v-if="email && !isEmailValid"  class="error-message">Email is not valid</div>
   </div>
-</template>
-  
-<script>
-import { defineComponent, ref, reactive, toRefs } from "vue";
-import useAuthStore from "@/store/auth-store.js";
-import { useRouter } from "vue-router";
+  <div class="password">
+  <label>Password: </label>
+  <input class="password-input" v-model="password" type="password" required />
+  <div v-if="!isPasswordValid && password" class="error-message">Enter a valid password</div>
+  </div>
+  </div>
+  <div class="new-user">
+  <div>
+  <button class="button" type="submit"><span>Login </span></button>
+  </div>
+  <div>
+  <p>New User?</p>
+  <div class="regbutton">
+    <button class="button1" type="submit" @click="takeMeToResgistraion"><span>Register </span></button>
+  </div>
+  </div>
+</div>
+  </form>
+  </div>
+  </template>
+   
+  <script>
+  import { defineComponent, ref, computed} from "vue";
+  import useAuthStore from "@/store/auth-store.js";
+  import { useRouter } from "vue-router";
+   
+  export default defineComponent({
+    setup() {
+      const email = ref("");
+      const password = ref("");
+      const authStore = useAuthStore();
+      const router = useRouter();
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
+      const isLoggedIn = ref(false)
 
-export default defineComponent({
-  setup() {
-    const username = ref("");
-    const password = ref("");
-    const authStore = useAuthStore();
+      // const state = reactive({
+      //   isLoggedIn: false,
+      //   isEmailValid: true,
+      //   isPasswordValid: true,
+      // });
+      const isEmailValid = computed(() => emailRegex.test(email.value));
+      const isPasswordValid = computed(() => passwordRegex.test(password.value));
 
-    const router = useRouter();
-    const state = reactive({
-      isLoggedIn: false,
-    });
-
-
-    const login = async () => {
-      try {
-        const userCredentials = {
-          username: username.value,
-          password: password.value,
-        };
-
-        // Call your backend API for authentication
-        const token = await authStore.loginUser(userCredentials);
-        // console.log(token);
-        // Check if the token is received
-        if (token) {
-          sessionStorage.setItem("jwtToken", token.token);
-          sessionStorage.setItem("userId", token.userId)
-          authStore.userJWT = token.token
-          alert("Login successful!");
-          state.isLoggedIn = true;
-          router.push('/')
-
-          // Redirect to another page or perform other actions after successful login
-        } else {
-          alert("Invalid username or password");
+   
+      const login = async () => {
+   
+        // Custom password validation (at least 8 characters)
+   
+        if (isEmailValid.value && isPasswordValid.value) {
+          // Continue with login logic
+          try {
+            const userCredentials = {
+              username: email.value,
+              password: password.value,
+            };
+   
+            // Call your backend API for authentication
+            const token = await authStore.loginUser(userCredentials);
+   
+            // Check if the token is received
+            if (token) {
+              sessionStorage.setItem("jwtToken", token.token);
+              sessionStorage.setItem("userId", token.userId);
+              authStore.userJWT = token.token;
+              alert("Login successful!");
+              isLoggedIn.value = true;
+              router.push('/');
+              // Redirect to another page or perform other actions after successful login
+            } else {
+              alert("Invalid username or password");
+            }
+          } catch (error) {
+            console.error("Error during login:", error);
+            alert("An error occurred during login. Please try again later.");
+          }
         }
-      } catch (error) {
-        console.error("Error during login:", error);
-        alert("An error occurred during login. Please try again later.");
-      }
-    };
+      };
 
-    return {
-      login,
-      username,
-      password,
-      ...toRefs(state)
-    };
-  },
-});
-</script>
+      function takeMeToResgistraion(){
+        router.push("/register")
+          }
+
+          
+   
+      return {
+        isEmailValid,
+        // isEmailValid,
+        isPasswordValid,
+        login,
+        email,
+        password,
+        // ...toRefs(state),
+        takeMeToResgistraion
+      };
+    },
+  });
+  </script>
   
 <style scoped>
 .email {
@@ -84,6 +116,10 @@ export default defineComponent({
 
 .email-input {
   margin-left: 20px;
+  border-radius: 7px;
+}
+.password-input{
+  border-radius: 7px;
 }
 
 .login {
@@ -112,6 +148,23 @@ export default defineComponent({
   height: 200px;
   align-items: center;
 }
+.new-user{
+  margin-top: 150px;
+    margin-left: -245px;
+}
+
+.error-message{
+  color:red;
+  
+}
+.button1{
+  border-radius: 10px;
+  cursor: pointer;
+}
+.regbutton :hover{
+   background-color: black;
+   color: white;
+}
 
 .button {
   border-radius: 50px;
@@ -120,7 +173,7 @@ export default defineComponent({
   color: #ffffff;
   text-align: center;
   font-size: 20px;
-  padding: 10px;
+  padding: 5px;
   width: 150px;
   transition: all 0.5s;
   cursor: pointer;

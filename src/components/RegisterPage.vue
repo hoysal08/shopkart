@@ -6,7 +6,9 @@
       <div>
         <div class="email">
           <label> Email: </label>
-          <input class="email-input" v-model="email" type="email" required />
+        
+          <input class="email-input" v-model="email" type="text" required />
+          <div v-if="!isEmailValid && email" class="error-message">Email is not valid</div>
         </div>
         <div class="name">
           <label> Name: </label>
@@ -15,17 +17,18 @@
         <div class="password">
           <label>Password:</label>
           <input class="password-input" v-model="password" type="password" required />
+          <div v-if="!isPasswordValid && password" class="error-message">Enter a valid password</div>
         </div>
       </div>
       <div>
-        <button class="button" type="submit"><span>Register </span></button>
+        <button class="button" type="submit" @click="registerUser"><span>Register </span></button>
       </div>
     </form>
   </div>
 </template>
     
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import useAuthStore from "@/store/auth-store.js";
 
@@ -35,10 +38,23 @@ export default {
     const email = ref("");
     const password = ref("");
     const username = ref("");
+    
 
     const router = useRouter();
+
+    
+    const isEmailValid = computed(() => emailRegex.test(email.value));
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const isPasswordValid = computed(() => passwordRegex.test(password.value));
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
+     
     const register = async () => {
-      const userDto = {
+
+      if(isEmailValid.value && isPasswordValid.value){
+        const userDto = {
         userEmail: email.value,
         password: password.value,
         username: username.value,
@@ -52,10 +68,13 @@ export default {
         alert("Register successful!");
         // Redirect to another page or perform other actions after successful registration
         router.push('/login')
+       }
       }
     };
 
     return {
+      isPasswordValid,
+      isEmailValid,
       register,
       email,
       password,
@@ -83,8 +102,18 @@ export default {
 
 .email-input {
   margin-left: 20px;
+  border-radius: 7px;
 }
-
+.password-input{
+  border-radius: 7px;
+}
+.name-input{
+  border-radius: 7px;
+}
+.error-message{
+  color:red;
+  
+}
 .register {
   background: #b5b4b4;
   width: 300px;
