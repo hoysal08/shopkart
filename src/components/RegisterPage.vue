@@ -69,6 +69,7 @@ if (result && result.error) {
 }
 };
 
+
     return {
       isPasswordValid,
       isEmailValid,

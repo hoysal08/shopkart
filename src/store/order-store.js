@@ -10,7 +10,7 @@ export const useOrderService = defineStore("OrderrOOT", () => {
 
   const FETCH_ORDER = async (userId) => {
     const res = await fetch(
-      `http://localhost:8095/api/orders/byUserId/${userId}`
+      `http://10.20.3.164:8095/api/orders/byUserId/${userId}`
     );
     const jsonnew = await res.json();
     userOrders.value = jsonnew;
@@ -38,7 +38,7 @@ export const useOrderService = defineStore("OrderrOOT", () => {
       body: JSON.stringify(OrderItem),
     };
 
-    const urlWithUserId = `http://localhost:8095/api/orders/add`;
+    const urlWithUserId = `http://10.20.3.164:8095/api/orders/add`;
     const res = await fetch(urlWithUserId, options);
     console.log(res)
   };

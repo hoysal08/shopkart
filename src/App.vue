@@ -44,6 +44,10 @@ body {
   justify-content: center;
   align-items: center;
   margin: auto;
+
+ 
+ 
+  
 }
 
 nav {

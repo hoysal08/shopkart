@@ -14,12 +14,12 @@
         <div v-else>
             <div class="main">
                 <h2>Your Cart Items</h2>
-                <ul>
-                    <li v-for="(item, index) in cartItem" :key="index" class="containerItem">
+                
+                    <div v-for="(item, index) in cartItem" :key="index" class="containerItem">
                         <div>
                             <div>{{ prododListaccCart[index]?.productName }}</div>
                         </div>
-                        <img :src="prododListaccCart[index]?.productImageURL[0]" alt="">
+                        <img class="img" :src="prododListaccCart[index]?.productImageURL[0]" alt="">
                         <!-- <div>Merchant ID: {{ item.merchantId }}</div> -->
                         <div>
                             <button @click="decreaseQuantity(index)" class="quantity-button">-</button>
@@ -29,9 +29,9 @@
 
                         <div>Price: {{ item.price }}</div>
                         <!-- <button @click="removeItem">Remove Item</button> -->
-                    </li>
+                    </div>
 
-                </ul>
+               
             </div>
 
             <div class="cart-summary">
@@ -198,7 +198,14 @@ export default {
 
 .containerItem {
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
+    border-style: solid;
+    border-width: 2px;
+    padding: 10px;
+    margin-bottom: 10px;
+    flex-direction: row;
+    align-items: center;
+
 
 }
 
@@ -220,7 +227,12 @@ export default {
     font-size: 1.5em;
     margin-bottom: 20px;
 }
+.img{
+    height: 100px;
+    width: 100px;
+}
 
+/* 
 ul {
     list-style-type: none;
     padding: 0;
@@ -230,7 +242,8 @@ li {
     border-bottom: 1px solid #ddd;
     padding: 20px;
     display: flex;
-    align-items: center;
+    align-items: baseline;
+    left: 0;
 }
 
 li img {
@@ -242,7 +255,7 @@ li img {
 
 li div {
     flex-grow: 1;
-}
+} */
 
 .quantity-button {
     background-color: #28a745;
@@ -388,5 +401,19 @@ li div {
     cursor: pointer;
     font-size: 16px;
     border-radius: 4px;
+}
+
+
+@media screen and (min-width: 360px) and (max-width: 900px) {
+
+
+.containerItem {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-content: center;
+    gap:20px;
+}
+
 }
 </style>
