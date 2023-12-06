@@ -50,6 +50,7 @@ export const useCartStore = defineStore("cart", () => {
 
     const urlWithUserId = `http://localhost:8095/api/carts/createOrUpdate?userId=${userId}`;
     const res = await fetch(urlWithUserId, options);
+    console.log(res);
   };
 
   const getCartById = ref({ value: [] });
@@ -93,7 +94,7 @@ export const useCartStore = defineStore("cart", () => {
     getCartById,
     GET_CAR_BY_ID,
     deleteCart,
-    CREATE_OR_ADD_TO_CART_POST
+    CREATE_OR_ADD_TO_CART_POST,
   };
 });
 

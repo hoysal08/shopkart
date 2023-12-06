@@ -69,6 +69,7 @@ export const useAuthStore = defineStore("auth", () => {
     registerUser,
     loginUser,
     userJWT,
+    userID
   };
 });
 
