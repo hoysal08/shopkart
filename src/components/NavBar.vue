@@ -15,10 +15,16 @@
       </div>
     </div>
 
+    <div class="nav-right sub-menu" v-if="!signUp" @click="takeMeToSignup">
+            <img :src="userIcon" class="icon-new">
+            <p class="login-text">signUp</p>
+        </div>
+
     <div class="nav-right sub-menu" v-if="!logedIn" @click="takeMeToLogin">
       <img :src="userIcon" class="icon-new" />
       <p class="login-text">LogIn</p>
     </div>
+
     <div class="nav-right" v-if="logedIn">
       <div class="dropdown">
         <button class="dropbtn">=</button>
@@ -67,6 +73,9 @@ export default defineComponent({
     const takeMeToLogin = () => {
       router.push("/login");
     };
+    const takeMeToSignup = () => {
+            router.push("/register")
+    };
     const takeMeToOrders = () => {
       router.push("/orders");
     };
@@ -91,6 +100,7 @@ export default defineComponent({
     };
 
     return {
+      takeMeToSignup,
       userIcon,
       ordericon,
       shopingcart,
