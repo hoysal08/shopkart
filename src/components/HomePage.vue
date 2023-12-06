@@ -17,7 +17,7 @@
         </div>
         <button class="action-btn" @click="routeMeToSearch">Shop Now!</button>
         <div class="hero-2">
-            <h2>Featured Deals</h2>
+            <h2 class="deals">Featured Deals</h2>
             <div class="carousel-holder">
                 <CarouselComponent />
             </div>
@@ -67,7 +67,7 @@
 }
 
 .hero {
-    margin: 1rem
+    margin: 3rem
 }
 
 .action-btn {
@@ -87,6 +87,37 @@
 .hero-2 {
     margin-top: 3rem;
 }
+@media screen and (min-width: 360px) and (max-width: 900px) {
+   
+    .hero-cnt-title {
+    padding: 2rem;
+}
+    .hero-points {
+        display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.carousel-holder {
+   display: none;
+}
+.hero-2 {
+    margin-top: 2rem;
+}
+.deals{
+    display: none;
+}
+.hr-line {
+    width: 20%;
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+}
+
+
+
+
+
+
 </style>
 
 <script>

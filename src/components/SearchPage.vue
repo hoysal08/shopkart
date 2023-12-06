@@ -6,7 +6,7 @@
 
       <div class="card-content">
 
-        <h3>{{ product.productName }}</h3>
+        <h3 >{{ product.productName }}</h3>
         <p class="price">Rs. {{ product?.skus?.[0].price }}</p>
 
         <h3>Rating : {{ getRandomNumberWithTwoDecimals() }} / 5</h3>
@@ -47,14 +47,20 @@ export default defineComponent({
 </script>
 
 <style scoped>
+
+.oneline{
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: center;
   gap: 20px;
   margin-left: 5%;
   margin-right: 5%;
-  margin-top: 20px;
+  margin-top: 90px;
 
 }
 
@@ -77,6 +83,7 @@ export default defineComponent({
 
 }
 
+
 .card img {
   width: 100%;
   height: 330px;
@@ -85,7 +92,10 @@ export default defineComponent({
 }
 
 .card-content {
-  margin-top: 10px;
+  margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .card-content h3 {
@@ -96,6 +106,7 @@ export default defineComponent({
   margin: 5px 0;
   font-weight: bold;
 }
+
 
 @media screen and (min-width: 360px) and (max-width: 600px) {
   .card-container {
@@ -114,6 +125,12 @@ export default defineComponent({
     margin-bottom: 20px;
     box-sizing: border-box;
     cursor: pointer;
+  }
+  .card-content{
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
 </style>

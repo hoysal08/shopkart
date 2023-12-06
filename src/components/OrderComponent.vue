@@ -1,4 +1,5 @@
 <template>
+  <main class="main">
   <h1 class="order">Your Orders</h1>
   <div class="card-container" v-if="isLoggedIn">
     <div v-for="product in products" class="card" :key="product.productId" @click="routeMeTo(product.productId)">
@@ -14,6 +15,7 @@
   <div v-else class="min-h">
     <h3>Please login first</h3>
   </div>
+</main>
 </template>
 
 <script>
@@ -60,13 +62,15 @@ export default defineComponent({
 </script>
 
 <style scoped>
+.main{
+  margin-top: 85px;
+}
 .card-container {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 20px;
-  margin-left: 5%;
-  margin-right: 5%;
+  justify-content: center;
+  gap: 25px;
+ 
   margin-top: 20px;
 
 }
@@ -82,7 +86,7 @@ export default defineComponent({
 }
 
 .card {
-  height: 350px;
+  height: 285px;
   width: 190px;
   background-color: #ffffff;
   border-radius: 15px;
