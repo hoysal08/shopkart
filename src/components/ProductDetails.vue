@@ -48,12 +48,9 @@
       <div>
         <a @click="addToCart" class="cart-btn-add">Add to cart</a>
         <a @click="buyNow" class="cart-btn-buy">Buy it Now</a>
-      <div class="cart-div">
-        <a href="#" class="cart-btn-add">Add to cart</a>
-        <a href="#" class="cart-btn-buy">Buy it Now</a>
       </div>
     </div>
- 
+  </div>
   <div class="review-container">
     <h2>Customer review</h2>
     <p>No review Yet</p>
@@ -62,7 +59,6 @@
       <button class="review-submit">Submit</button>
     </div> -->
   </div>
-</div>
 </template>
 
 
@@ -176,69 +172,49 @@ export default defineComponent({
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
-
+ 
 }
-
-.reviewInput {
-  width: 85%;
-  padding: 1rem;
-  border-radius: 1rem;
-}
-
-.review-submit {
-  width: 10%;
-  margin: auto 0.2rem;
-  display: inline-block;
-  background-color: #010101;
-  border-radius: 20px;
-  font-size: 16px;
-  color: #ffffff;
-  text-decoration: none;
-  padding: 12px 30px;
-  transition: all 0.5s;
-  cursor: pointer;
-}
-
+ 
 .left-column {
   width: 300px;
   height: 400px;
   margin-right: 100px;
 }
-
+ 
 .right-column {
   width: 360px;
   height: 400px;
   text-align: justify;
 }
-
+ 
 .left-column img {
   width: 100%;
   height: 100%;
   border-radius: 10px;
   top: 10%;
   object-fit: contain;
-
+ 
   margin: auto;
   border-radius: 25px;
   border: 2px solid #8e918e;
   padding: 20px;
 }
-
+ 
 .product-description {
   margin-bottom: 20px;
 }
-
+ 
 .brand div {
   display: inline-block;
   margin-left: 5%;
 }
-
+ 
 .color div {
   margin-top: 5%;
   display: inline-block;
   margin-left: 5%;
 }
-
+ 
 .color-choose input[type="radio"]+label span {
   display: inline-block;
   width: 40px;
@@ -250,28 +226,28 @@ export default defineComponent({
   border: 2px solid #ffffff;
   box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.33);
 }
-
+ 
 .color-choose input[type="radio"]#red+label span {
   background-color: #c91524;
 }
-
+ 
 .color-choose input[type="radio"]#blue+label span {
   background-color: #314780;
 }
-
+ 
 .color-choose input[type="radio"]#black+label span {
   background-color: #323232;
 }
-
+ 
 .color-choose input[type="radio"]:checked+label span {
   background-repeat: no-repeat;
   background-position: center;
 }
-
+ 
 .description {
   margin-top: 5%;
 }
-
+ 
 .cart-btn-add {
   display: inline-block;
   background-color: #010101;
@@ -281,10 +257,9 @@ export default defineComponent({
   text-decoration: none;
   padding: 12px 30px;
   transition: all 0.5s;
-  cursor: pointer;
   text-align: center;
 }
-
+ 
 .cart-btn-buy {
   display: inline-block;
   background-color: #6f6f6f;
@@ -295,20 +270,20 @@ export default defineComponent({
   padding: 12px 30px;
   transition: all 0.5s;
   margin-left: 10%;
-  cursor: pointer;
   text-align: center;
+  
 }
-
+ 
 .cart-btn-add:hover {
   background-color: #737373;
   color: #010101;
 }
-
+ 
 .cart-btn-buy:hover {
   background-color: #926868;
   color: #010101;
 }
-
+ 
 .review-container {
   margin-top: 15%;
   border-radius: 25px;
@@ -319,7 +294,7 @@ export default defineComponent({
   margin-bottom: 30px;
   text-align: justify;
 }
-
+ 
 @media screen and (min-width: 360px) and (max-width: 900px) {
   .container {
     display: flex;
@@ -329,26 +304,26 @@ export default defineComponent({
     margin-bottom: 25px;
     
   }
-
+ 
   .left-column {
     margin-top: 10%;
-
+ 
     width: 300px;
     height: 400px;
     margin-left: 8px;
   }
-
+ 
   .right-column {
     margin-top: 20%;
-
+ 
     width: 300px;
     height: 400px;
     margin-left: 8px;
   }
-
+ 
   .review-container {
     margin-top: 85%;
-
+ 
     border-radius: 25px;
     border: 2px solid #8e918e;
     margin-left: -15px;
@@ -366,7 +341,7 @@ export default defineComponent({
   margin-top: 10px;
   width: 200px;
 }
-
+ 
 .cart-btn-buy {
   margin-top: 10px;
   width: 200px;
@@ -374,6 +349,3 @@ export default defineComponent({
 }
 }
 </style>
-   
-
-  

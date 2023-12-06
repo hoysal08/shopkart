@@ -5,7 +5,7 @@
     <form @submit.prevent="login" class="form-div">
       <div>
         <div class="email">
-          <label> Email: </label>
+          <label> Name: </label>
           <input class="email-input" v-model="username" type="text" required />
         </div>
         <div class="password">

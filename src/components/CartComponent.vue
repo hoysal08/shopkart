@@ -1,7 +1,9 @@
 <template>
     <div class="cart-page">
         <h2>Your Shopping Cart</h2>
-
+        <!-- {{ cartitems }} heyy -->
+        <!-- {{ filteredList }} -->
+        <!-- {{ prododListaccCart }} -->
         <div v-if="cartItem.length === 0" class="empty-cart">
             <p>Your cart is empty. Start shopping!</p>
             <button>
@@ -10,16 +12,23 @@
         </div>
 
         <div v-else>
-            <div>
+            <div class="main">
                 <h2>Your Cart Items</h2>
                 <ul>
-                    <li v-for="(item, index) in cartItem" :key="index">
-                        <div>Product ID: {{ item.productId }}</div>
-                        <div>Merchant ID: {{ item.merchantId }}</div>
-                        <button @click="decreaseQuantity(index)" class="quantity-button">-</button>
-                        <span class="quantity">{{ item.quantity }}</span>
-                        <button @click="increaseQuantity(index)" class="quantity-button">+</button>
+                    <li v-for="(item, index) in cartItem" :key="index" class="containerItem">
+                        <div>
+                            <div>{{ prododListaccCart[index]?.productName }}</div>
+                        </div>
+                        <img :src="prododListaccCart[index]?.productImageURL[0]" alt="">
+                        <!-- <div>Merchant ID: {{ item.merchantId }}</div> -->
+                        <div>
+                            <button @click="decreaseQuantity(index)" class="quantity-button">-</button>
+                            <span class="quantity">{{ item.quantity }}</span>
+                            <button @click="increaseQuantity(index)" class="quantity-button">+</button>
+                        </div>
+
                         <div>Price: {{ item.price }}</div>
+                        <!-- <button @click="removeItem">Remove Item</button> -->
                     </li>
 
                 </ul>
@@ -28,41 +37,61 @@
             <div class="cart-summary">
                 <div class="summary-text">
                     <p>Total Items: {{ totalItems }}</p>
-                    <p>Total Price: ${{ totalPrice.toFixed(2) }}</p>
+                    <p>Total Price: Rs{{ totalPrice.toFixed(2) }}</p>
                 </div>
-                <button @click="removeItem" class="checkout-button">Proceed to Checkout</button>
+                <button @click="placeOrder" class="checkout-button">Proceed to Checkout</button>
             </div>
         </div>
     </div>
 </template>
   
 <script>
-import { computed, ref, onBeforeMount, onMounted } from 'vue';
+import { computed, ref, onBeforeMount, onMounted, watch } from 'vue';
 import useCartStore from '@/store/cart-store';
-// import useProductRootStore from '@/store/ProductStore';
+import useProductRootStore from '@/store/ProductStore';
+import useOrderService from '@/store/order-store'
 export default {
     setup() {
-
-
         const cartStore = useCartStore();
         const userId = sessionStorage.getItem("userId");
         const cartItem = ref([]);
-
+        const products = ref([]);
+        const productStore = useProductRootStore();
+        const email = ref("");
+        const orderStore = useOrderService();
+        // watch()
+        // console.log(products);
         onMounted(() => {
             cartItem.value.sort((a, b) => {
                 return a.productId.localeCompare(b.productId);
             });
         })
+
+        const prododListaccCart = computed(() => cartStore.getProductsId);
+        const cartitems = computed(() => cartStore.getCartById);
+        cartStore.GET_CAR_BY_ID(userId);
+        productStore.FETCH_PRODUCTS();
         onBeforeMount(async () => {
-            
-            try {
-                await cartStore.GET_CAR_BY_ID(userId);
-                cartItem.value = cartStore.getCartById;
-                console.log(cartItem.value);
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            }
+            await cartStore.GET_CAR_BY_ID(userId);
+            await productStore.FETCH_PRODUCTS();
+            cartItem.value = cartStore.getCartById;
+            products.value = productStore.products;
+            console.log(products.value);
+            console.log(cartItem.value);
+
         });
+
+        // watch(() => cartitems, (newCartItems) => {
+        //     console.log('inside watch');
+        //     const cartProductIds = new Set(newCartItems.map(item => item.productId));
+        //     const filteredProducts = products.value.filter(product => cartProductIds.has(product.productId));
+        //     filteredList = filteredProducts
+        // });
+        watch(cartItem,()=>{
+            console.log(cartItem)
+        })
+
+        console.log(orderStore);
 
         let cartItemDto = {};
         const totalPrice = computed(() => {
@@ -73,13 +102,33 @@ export default {
             return cartItem.value.reduce((total, item) => total + item.quantity, 0);
         });
 
+        var orderItemDto = []
+
+        const placeOrder = (() => {
+            for (let i = 0; i < cartitems.value.length; i++) {
+                const orderItem = {
+                    merchantId: cartitems.value[i].merchantId,
+                    ostatus: "Ordered",
+                    productId: cartitems.value[i].productId,
+                    quantity: cartitems.value[i].quantity,
+                    totalPrice: cartitems.value[i].quantity * cartitems.value[i].price,
+                    userId: userId,
+                };
+
+                orderItemDto.push(orderItem);
+            }
+            console.log(orderItemDto);
+
+            orderStore.ADD_ORDER(orderItemDto)
+
+            alert("order placed");
+
+        })
+
         const removeItem = (index) => {
-            // cartItem.value.splice(index, 1);
-            // cartItem.value.splice(index, 1);
             console.log(userId);
             console.log(cartItem.value[index].cartId);
-            // console.log(cartItem.value[index].cartId);
-            cartStore.deleteCart(userId,cartItem.value[index].cartId);
+            cartStore.deleteCart(userId, cartItem.value[index].cartId);
 
         };
         const increaseQuantity = (index) => {
@@ -115,9 +164,14 @@ export default {
             totalItems,
             totalPrice,
             cartItem,
+            cartitems,
             removeItem,
             increaseQuantity,
-            decreaseQuantity
+            decreaseQuantity,
+            prododListaccCart,
+            placeOrder,
+            email
+
         }
     }
 };
@@ -126,11 +180,105 @@ export default {
 <style scoped>
 .cart-page {
     margin: auto;
+    margin-top: 90px;
     max-width: 800px;
-    margin-top: 85px;
-    padding: 20px;
    
+    padding: 20px;
 }
+
+.empty-cart {
+    text-align: center;
+    padding: 20px;
+}
+
+.empty-cart p {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.containerItem {
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.empty-cart button {
+    background-color: #007BFF;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border: none;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.empty-cart button:hover {
+    background-color: #0056b3;
+}
+
+.cart-page h2 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    border-bottom: 1px solid #ddd;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+}
+
+li img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-right: 20px;
+}
+
+li div {
+    flex-grow: 1;
+}
+
+.quantity-button {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    padding: 8px 12px;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.quantity {
+    margin: 0 10px;
+    font-size: 1.2em;
+}
+
+.cart-summary {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.checkout-button {
+    background-color: #dc3545;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border: none;
+    font-size: 1em;
+    cursor: pointer;
+}
+
+.checkout-button:hover {
+    background-color: #c82333;
+}
+
+
 
 .empty-cart {
     text-align: center;
@@ -204,7 +352,7 @@ export default {
 
 .total-amount {
     font-weight: bold;
-    color: #27ae60;
+    color: #27AE27
 }
 
 .remove-button {

@@ -172,6 +172,7 @@ export default defineComponent({
 
 .login-text {
   margin: auto 0.3rem !important;
+  cursor: pointer;
 }
 
 .sub-menu p {
