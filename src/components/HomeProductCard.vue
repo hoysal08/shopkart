@@ -22,7 +22,9 @@ export default defineComponent({
     setup() {
         const router = useRouter();
         const routeMeToProduct = (productId) => {
-            router.push(`/product/${productId}`)
+            router.push(`/product/${productId}`).then(() => {
+                window.scrollTo({top : 0, behavior : "smooth"})
+            })
         }
 
         return {
@@ -46,7 +48,7 @@ export default defineComponent({
     width: 100%;
     height: 100%;
     object-fit: contain;
-    /* animation: move-x-y 2s infinite; */
+
 }
 
 .product-image img {

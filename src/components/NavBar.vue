@@ -21,6 +21,7 @@
         <button class="search-button" @click="takeMeToSearch">Search</button>
       </div>
     </div>
+    
     <div class="dropdown" v-if="!logedIn">
       <button class="dropbtn">=</button>
       <div class="dropdown-content">
@@ -50,7 +51,7 @@
               <img class="icon" :src="shopingcart" />Cart
             </p>
           </div>
-
+          <p>Hi! {{ userName }}</p>
           <!-- <img :src="userIcon" class="icon">
                         <p>My Profile</p> -->
           <button class="logoutButton" @click="logout">Logout</button>
@@ -61,16 +62,16 @@
 </template>
  
 <script>
-import { defineComponent, computed, ref } from "vue";
+import { defineComponent, computed, ref, onBeforeMount, watch } from "vue";
 import userIcon from "@/assets/userIcon.svg";
 import ordericon from "@/assets/ordericon.svg";
 import shopingcart from "@/assets/shopingcart.svg";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import useAuthStore from "@/store/auth-store.js";
-
 export default defineComponent({
   setup() {
     const authStore = useAuthStore();
+    const route = useRoute()
     const isLoggedIn = computed(() => {
       const token = sessionStorage.getItem("jwtToken");
       return token !== null && token.length !== 0;
@@ -78,8 +79,9 @@ export default defineComponent({
     const searchInput = ref("");
     const logout = () => {
       sessionStorage.removeItem("jwtToken");
+      sessionStorage.removeItem("username");
+      sessionStorage.removeItem("userId")
       isLoggedIn.value = false;
-
       window.location.href = '/'
     };
     const takeMeToLogin = () => {
@@ -91,6 +93,11 @@ export default defineComponent({
     const takeMeToOrders = () => {
       router.push("/orders");
     };
+    watch(route, () => {
+      if (route.query?.searchInput) {
+        searchInput.value = route.query.searchInput
+      }
+    })
     const takeMeToSearch = () => {
       router.push({
         name: "search",
@@ -99,6 +106,11 @@ export default defineComponent({
         },
       });
     };
+    const userName = computed(() => authStore.userName)
+
+    onBeforeMount(() => {
+      authStore.getUserNameById(authStore.userID)
+    })
     const takeMeToCart = () => {
       router.push("/cart");
     };
@@ -126,6 +138,7 @@ export default defineComponent({
       takeMeToSearch,
       takeMeToCart,
       searchInput,
+      userName,
     };
   },
 });
@@ -294,7 +307,6 @@ export default defineComponent({
 
   .dropdown:hover .dropdown-content {
     display: block;
-   
   }
 
   .dropdown:hover .dropbtn {

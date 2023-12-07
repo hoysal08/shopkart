@@ -1,4 +1,4 @@
-<!-- Login.vue -->
+
 <template>
   <div class="login">
     <h2>Login</h2>
@@ -54,8 +54,7 @@ export default defineComponent({
 
         // Call your backend API for authentication
         const token = await authStore.loginUser(userCredentials);
-        // console.log(token);
-        // Check if the token is received
+        
         if (token) {
           sessionStorage.setItem("jwtToken", token.token);
           sessionStorage.setItem("userId", token.userId)

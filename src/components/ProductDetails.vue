@@ -54,10 +54,6 @@
   <div class="review-container">
     <h2>Customer review</h2>
     <p>No review Yet</p>
-    <!-- <div>
-      <input placeholder="Write a review" type="text" class="reviewInput">
-      <button class="review-submit">Submit</button>
-    </div> -->
   </div>
 </template>
 

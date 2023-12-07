@@ -23,7 +23,6 @@ export const useProductRootStore = defineStore("productRoot", () => {
   const FETCH_BOOKS_PRODUCTS = async () => {
     const res = await fetch(
       "http://10.20.3.164:8099/api/products/by-category/Books"
-
     );
     const jsonnew = await res.json();
     productsOfBooks.value = jsonnew;
