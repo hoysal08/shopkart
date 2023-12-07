@@ -5,24 +5,35 @@
       <!-- <router-link to ="/">ShopKart</router-link> -->
     </div>
 
-    <div :class="{
-      'search-cnt-loggedin': logedIn,
-      'search-cnt-loggedout': !logedIn,
-    }">
+    <div
+      :class="{
+        'search-cnt-loggedin': logedIn,
+        'search-cnt-loggedout': !logedIn,
+      }"
+    >
       <div class="search">
-        <input type="text" class="search-input" placeholder="Enter your need!" v-model="searchInput" />
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Enter your need!"
+          v-model="searchInput"
+        />
         <button class="search-button" @click="takeMeToSearch">Search</button>
       </div>
     </div>
-
-    <div class="nav-right sub-menu" v-if="!signUp" @click="takeMeToSignup">
-            <img :src="userIcon" class="icon-new">
-            <p class="login-text">signUp</p>
+    <div class="dropdown" v-if="!logedIn">
+      <button class="dropbtn">=</button>
+      <div class="dropdown-content">
+        <div class="nav-right sub-menu" v-if="!logedIn" @click="takeMeToSignup">
+          <img :src="userIcon" class="icon-new" />
+          <p class="login-text">signUp</p>
         </div>
 
-    <div class="nav-right sub-menu" v-if="!logedIn" @click="takeMeToLogin">
-      <img :src="userIcon" class="icon-new" />
-      <p class="login-text">LogIn</p>
+        <div class="nav-right sub-menu" v-if="!logedIn" @click="takeMeToLogin">
+          <img :src="userIcon" class="icon-new" />
+          <p class="login-text">LogIn</p>
+        </div>
+      </div>
     </div>
 
     <div class="nav-right" v-if="logedIn">
@@ -64,17 +75,18 @@ export default defineComponent({
       const token = sessionStorage.getItem("jwtToken");
       return token !== null && token.length !== 0;
     });
-    const searchInput = ref("")
+    const searchInput = ref("");
     const logout = () => {
       sessionStorage.removeItem("jwtToken");
       isLoggedIn.value = false;
-      window.location.reload();
+
+      window.location.href = '/'
     };
     const takeMeToLogin = () => {
       router.push("/login");
     };
     const takeMeToSignup = () => {
-            router.push("/register")
+      router.push("/register");
     };
     const takeMeToOrders = () => {
       router.push("/orders");
@@ -83,8 +95,8 @@ export default defineComponent({
       router.push({
         name: "search",
         query: {
-          searchInput: searchInput.value
-        }
+          searchInput: searchInput.value,
+        },
       });
     };
     const takeMeToCart = () => {
@@ -113,7 +125,7 @@ export default defineComponent({
       takeMeToOrders,
       takeMeToSearch,
       takeMeToCart,
-      searchInput
+      searchInput,
     };
   },
 });
@@ -130,7 +142,7 @@ export default defineComponent({
 
 .search-cnt-loggedout {
   flex: 1;
-  margin-right: 300px;
+  /* margin-right: 300px; */
 }
 
 .logoutButton {
@@ -244,7 +256,7 @@ export default defineComponent({
 @media screen and (min-width: 360px) and (max-width: 900px) {
   .search {
     min-width: 250px;
-    margin-left: -20px;
+    margin-left: -30px;
   }
 
   .dropbtn {
@@ -268,7 +280,6 @@ export default defineComponent({
   .dropdown {
     position: relative;
     display: inline-block;
-
   }
 
   .dropdown-content {
@@ -283,7 +294,7 @@ export default defineComponent({
 
   .dropdown:hover .dropdown-content {
     display: block;
-
+   
   }
 
   .dropdown:hover .dropbtn {

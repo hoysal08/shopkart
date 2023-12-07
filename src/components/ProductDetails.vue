@@ -258,6 +258,7 @@ export default defineComponent({
   padding: 12px 30px;
   transition: all 0.5s;
   text-align: center;
+  cursor: pointer;
 }
  
 .cart-btn-buy {
@@ -271,6 +272,7 @@ export default defineComponent({
   transition: all 0.5s;
   margin-left: 10%;
   text-align: center;
+  cursor: pointer;
   
 }
  
