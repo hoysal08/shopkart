@@ -320,11 +320,10 @@ export default defineComponent({
   }
  
   .review-container {
-    margin-top: 85%;
- 
+    margin-top: 60%;
     border-radius: 25px;
     border: 2px solid #8e918e;
-    margin-left: -15px;
+     margin-left:20%;
     padding: 20px;
     /* margin-left: 8px; */
     width: 261px;

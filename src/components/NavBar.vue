@@ -5,23 +5,16 @@
       <!-- <router-link to ="/">ShopKart</router-link> -->
     </div>
 
-    <div
-      :class="{
-        'search-cnt-loggedin': logedIn,
-        'search-cnt-loggedout': !logedIn,
-      }"
-    >
+    <div :class="{
+      'search-cnt-loggedin': logedIn,
+      'search-cnt-loggedout': !logedIn,
+    }">
       <div class="search">
-        <input
-          type="text"
-          class="search-input"
-          placeholder="Enter your need!"
-          v-model="searchInput"
-        />
+        <input type="text" class="search-input" placeholder="Enter your need!" v-model="searchInput" />
         <button class="search-button" @click="takeMeToSearch">Search</button>
       </div>
     </div>
-    
+
     <div class="dropdown" v-if="!logedIn">
       <button class="dropbtn">=</button>
       <div class="dropdown-content">
@@ -258,6 +251,7 @@ export default defineComponent({
   border: none;
   background-color: #292d32;
   color: #fff;
+  cursor: pointer;
 }
 
 .nav-cnt a {

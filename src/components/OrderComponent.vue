@@ -1,21 +1,24 @@
 <template>
   <main class="main">
-  <h1 class="order">Your Orders</h1>
-  <div class="card-container min-h" v-if="isLoggedIn">
-    <div v-for="product in products" class="card" :key="product.productId" @click="routeMeTo(product.productId)">
-      <img :src="product.productImageURL?.[0]" alt="Image" />
-      <div class="card-content">
-        <h3 class="oneline">{{ product.productName }}</h3>
-        <p class="price">Rs: {{ product.totalPrice }}</p>
-        <p>Order Status:{{ product.Ostatus || " Ordered" }}</p>
-        <p>Quantity: {{ product.quantity }}</p>
+    <h1 class="order">Your Orders</h1>
+    <div class="card-container min-h" v-if="isLoggedIn">
+      <div v-if="products?.length === 0">
+        <h3>You have place 0 orders with us</h3>
+      </div>
+      <div v-for="product in products" class="card" :key="product.productId" @click="routeMeTo(product.productId)">
+        <img :src="product.productImageURL?.[0]" alt="Image" />
+        <div class="card-content">
+          <h3 class="oneline">{{ product.productName }}</h3>
+          <p class="price">Rs: {{ product.totalPrice }}</p>
+          <p>Order Status:{{ product.Ostatus || " Ordered" }}</p>
+          <p>Quantity: {{ product.quantity }}</p>
+        </div>
       </div>
     </div>
-  </div>
-  <div v-else class="min-h">
-    <h3>Please login first</h3>
-  </div>
-</main>
+    <div v-else class="min-h">
+      <h3>Please login first</h3>
+    </div>
+  </main>
 </template>
 
 <script>
@@ -62,10 +65,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.main{
+.main {
   margin-top: 85px;
   margin-bottom: 180px;
 }
+
 .card-container {
   display: flex;
   flex-wrap: wrap;
@@ -140,12 +144,13 @@ export default defineComponent({
     margin-left: 8px;
     margin-right: 8px;
   }
+
   .card img {
-  width: 100%;
-  height: 108px;
-  border-radius: 10px;
-  object-fit: contain;
-}
+    width: 100%;
+    height: 108px;
+    border-radius: 10px;
+    object-fit: contain;
+  }
 }
 </style>
 
