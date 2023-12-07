@@ -5,19 +5,12 @@
       <!-- <router-link to ="/">ShopKart</router-link> -->
     </div>
 
-    <div
-      :class="{
-        'search-cnt-loggedin': logedIn,
-        'search-cnt-loggedout': !logedIn,
-      }"
-    >
+    <div :class="{
+      'search-cnt-loggedin': logedIn,
+      'search-cnt-loggedout': !logedIn,
+    }">
       <div class="search">
-        <input
-          type="text"
-          class="search-input"
-          placeholder="Enter your need!"
-          v-model="searchInput"
-        />
+        <input type="text" class="search-input" placeholder="Enter your need!" v-model="searchInput" />
         <button class="search-button" @click="takeMeToSearch">Search</button>
       </div>
     </div>
@@ -74,8 +67,10 @@ export default defineComponent({
     const searchInput = ref("");
     const logout = () => {
       sessionStorage.removeItem("jwtToken");
+      sessionStorage.removeItem("username");
+      sessionStorage.removeItem("userId")
       isLoggedIn.value = false;
-      window.location.reload();
+      window.location.href = "/"
     };
     const takeMeToLogin = () => {
       router.push("/login");
