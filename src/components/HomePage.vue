@@ -123,11 +123,6 @@
 }
 }
 
-
-
-
-
-
 </style>
 
 <script>
@@ -164,8 +159,7 @@ export default defineComponent({
 
         })
         const routeMeToSearch = () => {
-
-
+            
             router.push("/search")
         }
         return {

@@ -22,7 +22,9 @@ export default defineComponent({
     setup() {
         const router = useRouter();
         const routeMeToProduct = (productId) => {
-            router.push(`/product/${productId}`)
+            router.push(`/product/${productId}`).then(() => {
+                window.scrollTo({top : 0, behavior : "smooth"})
+            })
         }
 
         return {
