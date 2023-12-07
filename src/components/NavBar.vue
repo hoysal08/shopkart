@@ -44,16 +44,16 @@
 </template>
  
 <script>
-import { defineComponent, computed, ref, onBeforeMount } from "vue";
+import { defineComponent, computed, ref, onBeforeMount, watch } from "vue";
 import userIcon from "@/assets/userIcon.svg";
 import ordericon from "@/assets/ordericon.svg";
 import shopingcart from "@/assets/shopingcart.svg";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 import useAuthStore from "@/store/auth-store.js";
-
 export default defineComponent({
   setup() {
     const authStore = useAuthStore();
+    const route = useRoute()
     const isLoggedIn = computed(() => {
       const token = sessionStorage.getItem("jwtToken");
       return token !== null && token.length !== 0;
@@ -70,6 +70,11 @@ export default defineComponent({
     const takeMeToOrders = () => {
       router.push("/orders");
     };
+    watch(route, () => {
+      if (route.query?.searchInput) {
+        searchInput.value = route.query.searchInput
+      }
+    })
     const takeMeToSearch = () => {
       router.push({
         name: "search",
@@ -78,9 +83,9 @@ export default defineComponent({
         }
       });
     };
-    const userName = computed(()=> authStore.userName)
+    const userName = computed(() => authStore.userName)
 
-    onBeforeMount(()=>{
+    onBeforeMount(() => {
       authStore.getUserNameById(authStore.userID)
     })
     const takeMeToCart = () => {
