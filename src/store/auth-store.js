@@ -6,7 +6,8 @@ export const useAuthStore = defineStore("auth", () => {
     registerStatus: { value: {} },
   });
   const userJWT = ref(sessionStorage.getItem("jwtToken") || "");
-  const userID = ref(sessionStorage.getItem("userId") || "")
+  const userID = ref(sessionStorage.getItem("userId") || "");
+  const userName = ref(sessionStorage.getItem("username" || ""));
 
   const loginUser = async (userCredentials) => {
     try {
@@ -18,7 +19,10 @@ export const useAuthStore = defineStore("auth", () => {
         body: JSON.stringify(userCredentials),
       };
 
-      const res = await fetch("http://10.20.3.164:8051/api/auth/login", options);
+      const res = await fetch(
+        "http://10.20.3.164:8051/api/auth/login",
+        options
+      );
 
       if (!res.ok) {
         console.error("Error during login:", res.status);
@@ -33,7 +37,6 @@ export const useAuthStore = defineStore("auth", () => {
       throw error;
     }
   };
-
 
   const registerUser = async (userDto) => {
     try {
@@ -64,12 +67,23 @@ export const useAuthStore = defineStore("auth", () => {
     }
   };
 
+  const getUserNameById = async (userId) => {
+    const res = await fetch(
+      `http://10.20.3.164:8051/api/users/get-user/${userId}`
+    );
+    const valueee = await res.text();
+    console.log(valueee);
+    userName.value = valueee;
+    sessionStorage.setItem("username", valueee);
+  };
 
   return {
     registerUser,
     loginUser,
     userJWT,
-    userID
+    userID,
+    getUserNameById,
+    userName
   };
 });
 

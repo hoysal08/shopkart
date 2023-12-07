@@ -33,7 +33,7 @@
               <img class="icon" :src="shopingcart" />Cart
             </p>
           </div>
-
+          <p>Hi! {{ userName }}</p>
           <!-- <img :src="userIcon" class="icon">
                         <p>My Profile</p> -->
           <button class="logoutButton" @click="logout">Logout</button>
@@ -44,7 +44,7 @@
 </template>
  
 <script>
-import { defineComponent, computed, ref } from "vue";
+import { defineComponent, computed, ref, onBeforeMount } from "vue";
 import userIcon from "@/assets/userIcon.svg";
 import ordericon from "@/assets/ordericon.svg";
 import shopingcart from "@/assets/shopingcart.svg";
@@ -78,6 +78,11 @@ export default defineComponent({
         }
       });
     };
+    const userName = computed(()=> authStore.userName)
+
+    onBeforeMount(()=>{
+      authStore.getUserNameById(authStore.userID)
+    })
     const takeMeToCart = () => {
       router.push("/cart");
     };
@@ -103,7 +108,8 @@ export default defineComponent({
       takeMeToOrders,
       takeMeToSearch,
       takeMeToCart,
-      searchInput
+      searchInput,
+      userName
     };
   },
 });
