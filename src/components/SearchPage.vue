@@ -18,6 +18,7 @@ import router from "@/router";
 import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import useProductRootStore from "@/store/ProductStore";
 import { useRoute } from "vue-router";
+
 export default defineComponent({
   setup() {
     const rootStore = useProductRootStore()
@@ -26,7 +27,9 @@ export default defineComponent({
     const safeProduct = computed(() => rootStore.products)
     const searchInput = ref("")
     const routeMeTo = (productId) => {
-      router.push(`/product/${productId}`);
+      router.push(`/product/${productId}`).then(() => {
+        window.scrollTo({top : 0, behavior : "smooth"})
+      });
     };
 
     watch(route, () => {

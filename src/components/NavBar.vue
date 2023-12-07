@@ -5,20 +5,27 @@
       <!-- <router-link to ="/">ShopKart</router-link> -->
     </div>
 
-    <div :class="{
-      'search-cnt-loggedin': logedIn,
-      'search-cnt-loggedout': !logedIn,
-    }">
+    <div
+      :class="{
+        'search-cnt-loggedin': logedIn,
+        'search-cnt-loggedout': !logedIn,
+      }"
+    >
       <div class="search">
-        <input type="text" class="search-input" placeholder="Enter your need!" v-model="searchInput" />
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Enter your need!"
+          v-model="searchInput"
+        />
         <button class="search-button" @click="takeMeToSearch">Search</button>
       </div>
     </div>
 
     <div class="nav-right sub-menu" v-if="!signUp" @click="takeMeToSignup">
-            <img :src="userIcon" class="icon-new">
-            <p class="login-text">signUp</p>
-        </div>
+      <img :src="userIcon" class="icon-new" />
+      <p class="login-text">signUp</p>
+    </div>
 
     <div class="nav-right sub-menu" v-if="!logedIn" @click="takeMeToLogin">
       <img :src="userIcon" class="icon-new" />
@@ -64,7 +71,7 @@ export default defineComponent({
       const token = sessionStorage.getItem("jwtToken");
       return token !== null && token.length !== 0;
     });
-    const searchInput = ref("")
+    const searchInput = ref("");
     const logout = () => {
       sessionStorage.removeItem("jwtToken");
       isLoggedIn.value = false;
@@ -74,7 +81,7 @@ export default defineComponent({
       router.push("/login");
     };
     const takeMeToSignup = () => {
-            router.push("/register")
+      router.push("/register");
     };
     const takeMeToOrders = () => {
       router.push("/orders");
@@ -88,8 +95,8 @@ export default defineComponent({
       router.push({
         name: "search",
         query: {
-          searchInput: searchInput.value
-        }
+          searchInput: searchInput.value,
+        },
       });
     };
     const userName = computed(() => authStore.userName)
@@ -124,7 +131,7 @@ export default defineComponent({
       takeMeToSearch,
       takeMeToCart,
       searchInput,
-      userName
+      userName,
     };
   },
 });
@@ -279,7 +286,6 @@ export default defineComponent({
   .dropdown {
     position: relative;
     display: inline-block;
-
   }
 
   .dropdown-content {
@@ -294,7 +300,6 @@ export default defineComponent({
 
   .dropdown:hover .dropdown-content {
     display: block;
-
   }
 
   .dropdown:hover .dropbtn {

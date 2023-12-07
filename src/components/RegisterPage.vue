@@ -37,24 +37,24 @@ export default {
     const email = ref("");
     const password = ref("");
     const username = ref("");
-
-    const isEmailValid = computed(() => emailRegex.test(email.value));
-
+    
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    
+    const isEmailValid = computed(() => emailRegex.test(email.value));
+    
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
 
     const isPasswordValid = computed(() => passwordRegex.test(password.value));
 
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
-    
-
     const router = useRouter();
+
     const register = async () => {
 
-if(isEmailValid.value && isPasswordValid.value){
-  const userDto = {
-  userEmail: email.value,
-  password: password.value,
-  username: username.value,
+      if(isEmailValid.value && isPasswordValid.value){
+        const userDto = {
+          userEmail: email.value,
+          password: password.value,
+          username: username.value,
 };
 
 const result = await registerUser(userDto);
@@ -69,8 +69,7 @@ if (result && result.error) {
 }
 };
 
-
-    return {
+return {
       isPasswordValid,
       isEmailValid,
       register,
