@@ -47,14 +47,14 @@ export default {
     const isPasswordValid = computed(() => passwordRegex.test(password.value));
 
     const router = useRouter();
-    
+
     const register = async () => {
 
-if(isEmailValid.value && isPasswordValid.value){
-  const userDto = {
-  userEmail: email.value,
-  password: password.value,
-  username: username.value,
+      if(isEmailValid.value && isPasswordValid.value){
+        const userDto = {
+          userEmail: email.value,
+          password: password.value,
+          username: username.value,
 };
 
 const result = await registerUser(userDto);
@@ -69,8 +69,7 @@ if (result && result.error) {
 }
 };
 
-
-    return {
+return {
       isPasswordValid,
       isEmailValid,
       register,

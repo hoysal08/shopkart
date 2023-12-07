@@ -48,7 +48,7 @@ export default defineComponent({
     width: 100%;
     height: 100%;
     object-fit: contain;
-    /* animation: move-x-y 2s infinite; */
+
 }
 
 .product-image img {
