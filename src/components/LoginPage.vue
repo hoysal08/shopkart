@@ -13,12 +13,20 @@
           <input class="password-input" v-model="password" type="password" required />
         </div>
       </div>
-      <div>
-        <button class="button" type="submit"><span>Login </span></button>
-      </div>
-    </form>
+      <div class="new-user">
+  <div>
+  <button class="button" type="submit"><span>Login </span></button>
   </div>
-</template>
+  <div>
+  <p>New User?</p>
+  <div class="regbutton">
+    <button class="button1" type="submit" @click="takeMeToResgistraion"><span>Register </span></button>
+  </div>
+  </div>
+</div>
+  </form>
+  </div>
+  </template>
   
 <script>
 import { defineComponent, ref, reactive, toRefs } from "vue";
@@ -53,20 +61,26 @@ export default defineComponent({
           sessionStorage.setItem("userId", token.userId)
           authStore.userJWT = token.token
           authStore.userID = token.userId
+          //alert("Login successful!");
           state.isLoggedIn = true;
           router.push('/')
 
           // Redirect to another page or perform other actions after successful login
         } else {
-          alert("Invalid username or password");
+          //alert("Invalid username or password");
         }
       } catch (error) {
         console.error("Error during login:", error);
-        alert("An error occurred during login. Please try again later.");
+        //alert("An error occurred during login. Please try again later.");
       }
     };
 
+    function takeMeToResgistraion(){
+        router.push("/register")
+          }
+
     return {
+      takeMeToResgistraion,
       login,
       username,
       password,
@@ -112,7 +126,23 @@ export default defineComponent({
   height: 200px;
   align-items: center;
 }
+.new-user{
+  margin-top: 150px;
+    margin-left: -245px;
+}
 
+.error-message{
+  color:red;
+  
+}
+.button1{
+  border-radius: 10px;
+  cursor: pointer;
+}
+.regbutton :hover{
+   background-color: black;
+   color: white;
+}
 .button {
   border-radius: 50px;
   background-color: #696766;

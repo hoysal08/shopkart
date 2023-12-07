@@ -7,6 +7,7 @@
         <div class="email">
           <label> Email: </label>
           <input class="email-input" v-model="email" type="email" required />
+          <div v-if="!isEmailValid && email" class="error-message">Email is not valid</div>
         </div>
         <div class="name">
           <label> Name: </label>
@@ -15,17 +16,18 @@
         <div class="password">
           <label>Password:</label>
           <input class="password-input" v-model="password" type="password" required />
+          <div v-if="!isPasswordValid && password" class="error-message">Enter a valid password</div>
         </div>
       </div>
       <div>
-        <button class="button" type="submit"><span>Register </span></button>
+        <button class="button" type="submit" @click="registerUser"><span>Register </span></button>
       </div>
     </form>
   </div>
 </template>
     
 <script>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import useAuthStore from "@/store/auth-store.js";
 
@@ -36,24 +38,41 @@ export default {
     const password = ref("");
     const username = ref("");
 
+    const isEmailValid = computed(() => emailRegex.test(email.value));
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    const isPasswordValid = computed(() => passwordRegex.test(password.value));
+
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
+    
+
     const router = useRouter();
     const register = async () => {
-      const userDto = {
-        userEmail: email.value,
-        password: password.value,
-        username: username.value,
-      };
 
-      const result = await registerUser(userDto);
+if(isEmailValid.value && isPasswordValid.value){
+  const userDto = {
+  userEmail: email.value,
+  password: password.value,
+  username: username.value,
+};
 
-      if (result && result.error) {
-        alert(result.error);
-      } else {
-        router.push('/login')
-      }
-    };
+const result = await registerUser(userDto);
+
+if (result && result.error) {
+  alert(result.error);
+} else {
+  alert("Register successful!");
+  //Redirect to another page or perform other actions after successful registration
+  router.push('/login')
+ }
+}
+};
+
 
     return {
+      isPasswordValid,
+      isEmailValid,
       register,
       email,
       password,
