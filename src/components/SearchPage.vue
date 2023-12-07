@@ -4,7 +4,7 @@
       <img :src="product.productImageURL[0]" alt="Image 1" />
       <div class="card-content">
 
-        <h3>{{ product.productName }}</h3>
+        <h3 class="oneline">{{ product.productName }}</h3>
         <p class="price">Rs. {{ product?.skus?.[0].price }}</p>
 
         <h3>Rating : {{ getRandomNumberWithTwoDecimals() }} / 5</h3>
@@ -76,12 +76,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.oneline {
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-}
-
 .card-container {
   display: flex;
   flex-wrap: wrap;
@@ -97,10 +91,11 @@ export default defineComponent({
   text-overflow: ellipsis;
   overflow: hidden;
   white-space: nowrap;
+  width: 240px;
 }
 
 .card {
-  height: 480px;
+  height: 488px;
   width: 300px;
   background-color: #ffffff;
   border-radius: 15px;
@@ -125,6 +120,7 @@ export default defineComponent({
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  text-align: justify;
 }
 
 .card-content h3 {

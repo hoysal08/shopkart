@@ -1,5 +1,5 @@
 <template>
-    <div class="cart-page">
+    <div class="cart-page min-h ">
         <h2>Your Shopping Cart</h2>
         <!-- {{ cartitems }} heyy -->
         <!-- {{ filteredList }} -->
@@ -12,7 +12,7 @@
         </div>
 
         <div v-else>
-            <div class="main">
+            <div class="main ">
                 <h2>Your Cart Items</h2>
                 
                     <div v-for="(item, index) in cartItem" :key="index" class="containerItem">
@@ -205,8 +205,10 @@ export default {
     margin-bottom: 10px;
     flex-direction: row;
     align-items: center;
+}
 
-
+.min-h {
+  height: 65vh;
 }
 
 .empty-cart button {

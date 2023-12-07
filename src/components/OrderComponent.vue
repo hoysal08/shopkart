@@ -1,7 +1,7 @@
 <template>
   <main class="main">
   <h1 class="order">Your Orders</h1>
-  <div class="card-container" v-if="isLoggedIn">
+  <div class="card-container min-h" v-if="isLoggedIn">
     <div v-for="product in products" class="card" :key="product.productId" @click="routeMeTo(product.productId)">
       <img :src="product.productImageURL?.[0]" alt="Image" />
       <div class="card-content">
@@ -64,19 +64,20 @@ export default defineComponent({
 <style scoped>
 .main{
   margin-top: 85px;
+  margin-bottom: 180px;
 }
 .card-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: 25px;
- 
+
   margin-top: 20px;
 
 }
 
 .min-h {
-  height: 70vh;
+  height: 40vh;
 }
 
 .oneline {
@@ -100,7 +101,7 @@ export default defineComponent({
 
 .card img {
   width: 100%;
-  height: 70px;
+  height: 120px;
   border-radius: 10px;
   object-fit: contain;
 }
@@ -136,7 +137,15 @@ export default defineComponent({
     margin-bottom: 20px;
     box-sizing: border-box;
     cursor: pointer;
+    margin-left: 8px;
+    margin-right: 8px;
   }
+  .card img {
+  width: 100%;
+  height: 108px;
+  border-radius: 10px;
+  object-fit: contain;
+}
 }
 </style>
 
