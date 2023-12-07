@@ -81,7 +81,7 @@ export default defineComponent({
 }
 
 .min-h {
-  height: 40vh;
+  min-height: 40vh;
 }
 
 .oneline {

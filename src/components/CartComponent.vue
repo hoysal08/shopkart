@@ -14,24 +14,21 @@
         <div v-else>
             <div class="main ">
                 <h2>Your Cart Items</h2>
-                
-                    <div v-for="(item, index) in cartItem" :key="index" class="containerItem">
-                        <div>
-                            <div>{{ prododListaccCart[index]?.productName }}</div>
-                        </div>
-                        <img class="img" :src="prododListaccCart[index]?.productImageURL[0]" alt="">
-                        <!-- <div>Merchant ID: {{ item.merchantId }}</div> -->
-                        <div>
-                            <button @click="decreaseQuantity(index)" class="quantity-button">-</button>
-                            <span class="quantity">{{ item.quantity }}</span>
-                            <button @click="increaseQuantity(index)" class="quantity-button">+</button>
-                        </div>
 
-                        <div>Price: {{ item.price }}</div>
-                        <!-- <button @click="removeItem">Remove Item</button> -->
+                <div v-for="(item, index) in productsAtCart" :key="index" class="containerItem">
+                    <div>
+                        <div>{{ item?.productName }}</div>
+                    </div>
+                    <img class="img" :src="item?.productImageURL[0]" alt="">
+                    <div>
+                        <button @click="decreaseQuantity(item.productId)" class="quantity-button">-</button>
+                        <span class="quantity">{{ cartPriceMapping[item.productId].quantity }}</span>
+                        <button @click="increaseQuantity(item.productId)" class="quantity-button">+</button>
                     </div>
 
-               
+                    <div>Price: {{ cartPriceMapping[item.productId].price }}</div>
+                </div>
+
             </div>
 
             <div class="cart-summary">
@@ -59,8 +56,12 @@ export default {
         const productStore = useProductRootStore();
         const email = ref("");
         const orderStore = useOrderService();
-        // watch()
-        // console.log(products);
+
+        const productsAtCart = computed(() => cartStore.getProduct)
+        const cartPriceMapping = computed(() => cartStore.cartMap);
+        watch(productsAtCart, () => {
+            console.log(productsAtCart)
+        })
         onMounted(() => {
             cartItem.value.sort((a, b) => {
                 return a.productId.localeCompare(b.productId);
@@ -73,7 +74,6 @@ export default {
         productStore.FETCH_PRODUCTS();
         onBeforeMount(async () => {
             await cartStore.GET_CAR_BY_ID(userId);
-            await productStore.FETCH_PRODUCTS();
             cartItem.value = cartStore.getCartById;
             products.value = productStore.products;
             console.log(products.value);
@@ -81,17 +81,14 @@ export default {
 
         });
 
-        // watch(() => cartitems, (newCartItems) => {
-        //     console.log('inside watch');
-        //     const cartProductIds = new Set(newCartItems.map(item => item.productId));
-        //     const filteredProducts = products.value.filter(product => cartProductIds.has(product.productId));
-        //     filteredList = filteredProducts
-        // });
-        watch(cartItem,()=>{
+        watch(cartItem, () => {
             console.log(cartItem)
         })
 
         console.log(orderStore);
+        onBeforeMount(() => {
+            cartStore.GET_CAR_BY_ID__(userId)
+        })
 
         let cartItemDto = {};
         const totalPrice = computed(() => {
@@ -120,9 +117,6 @@ export default {
             console.log(orderItemDto);
 
             orderStore.ADD_ORDER(orderItemDto)
-
-            //alert("order placed");
-
         })
 
         const removeItem = (index) => {
@@ -131,29 +125,31 @@ export default {
             cartStore.deleteCart(userId, cartItem.value[index].cartId);
 
         };
-        const increaseQuantity = (index) => {
-            cartItem.value[index].quantity++;
+
+        const increaseQuantity = (productId) => {
+            cartPriceMapping.value[productId].quantity++;
+
             cartItemDto = [{
-                cartId: cartItem.value[index].cartId,
-                productId: cartItem.value[index].productId,
-                merchantId: cartItem.value[index].merchantId,
-                quantity: cartItem.value[index].quantity,
-                price: cartItem.value[index].price
+                cartId: cartPriceMapping.value[productId].cartId,
+                productId: cartPriceMapping.value[productId].productId,
+                merchantId: cartPriceMapping.value[productId].merchantId,
+                quantity: cartPriceMapping.value[productId].quantity,
+                price: cartPriceMapping.value[productId].price
             }
             ]
             cartStore.UPDATE_CART(cartItemDto, userId);
 
         };
 
-        const decreaseQuantity = (index) => {
-            if (cartItem.value[index].quantity > 1) {
-                cartItem.value[index].quantity--;
+        const decreaseQuantity = (productId) => {
+            if (cartPriceMapping.value[productId].quantity > 1) {
+                cartPriceMapping.value[productId].quantity--;
                 cartItemDto = [{
-                    cartId: cartItem.value[index].cartId,
-                    productId: cartItem.value[index].productId,
-                    merchantId: cartItem.value[index].merchantId,
-                    quantity: cartItem.value[index].quantity,
-                    price: cartItem.value[index].price
+                    cartId: cartPriceMapping.value[productId].cartId,
+                    productId: cartPriceMapping.value[productId].productId,
+                    merchantId: cartPriceMapping.value[productId].merchantId,
+                    quantity: cartPriceMapping.value[productId].quantity,
+                    price: cartPriceMapping.value[productId].price
                 }
                 ]
                 cartStore.UPDATE_CART(cartItemDto, userId);
@@ -170,7 +166,9 @@ export default {
             decreaseQuantity,
             prododListaccCart,
             placeOrder,
-            email
+            email,
+            productsAtCart,
+            cartPriceMapping
 
         }
     }
@@ -182,7 +180,7 @@ export default {
     margin: auto;
     margin-top: 90px;
     max-width: 800px;
-   
+
     padding: 20px;
 }
 
@@ -208,7 +206,7 @@ export default {
 }
 
 .min-h {
-  height: 65vh;
+    min-height: 65vh;
 }
 
 .empty-cart button {
@@ -229,7 +227,8 @@ export default {
     font-size: 1.5em;
     margin-bottom: 20px;
 }
-.img{
+
+.img {
     height: 100px;
     width: 100px;
 }
@@ -409,13 +408,13 @@ li div {
 @media screen and (min-width: 360px) and (max-width: 900px) {
 
 
-.containerItem {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-content: center;
-    gap:20px;
-}
+    .containerItem {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        align-content: center;
+        gap: 20px;
+    }
 
 }
 </style>
