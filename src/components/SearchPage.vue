@@ -2,8 +2,6 @@
   <div class="card-container">
     <div v-for="product in products" class="card" :key="product.productId" @click="routeMeTo(product.productId)">
       <img :src="product.productImageURL[0]" alt="Image 1" />
-      <!-- <img v-for="(img,index) in Product.productImageURL" :src="img" :key="index" > -->
-
       <div class="card-content">
 
         <h3>{{ product.productName }}</h3>
@@ -17,21 +15,33 @@
 
 <script>
 import router from "@/router";
-import { computed, defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import useProductRootStore from "@/store/ProductStore";
 import { useRoute } from "vue-router";
 export default defineComponent({
   setup() {
-    const rootStore = useProductRootStore();
+    const rootStore = useProductRootStore()
     const route = useRoute()
     rootStore.FETCH_PRODUCTS()
-    let products = computed(() => rootStore.products);
-    const safeProduct = computed(() => rootStore.products);
+    const safeProduct = computed(() => rootStore.products)
     const searchInput = ref("")
-    searchInput.value = route.query.searchInput
     const routeMeTo = (productId) => {
       router.push(`/product/${productId}`);
     };
+
+    watch(route, () => {
+      if (route.query?.searchInput) {
+        searchInput.value = route.query.searchInput
+      }
+    })
+    const products = computed(() => {
+      if (searchInput.value?.length > 0) {
+        const res = searchObjects(safeProduct.value, searchInput.value)
+        return res
+      } else {
+        return safeProduct.value
+      }
+    })
 
     function getRandomNumberWithTwoDecimals() {
       const min = 3;
@@ -40,27 +50,18 @@ export default defineComponent({
       const roundedNumber = Math.round(randomNumber * 100) / 100;
       return roundedNumber;
     }
-    watch(searchInput, () => {
-      if (searchInput.value != "") {
-        products.value = searchObjects(safeProduct, searchInput)
-      }
-      else {
-        products.value = safeProduct
-      }
-    })
 
     function searchObjects(arrayOfObjects, searchText) {
-      searchText = searchText.toLowerCase(); // Convert search text to lowercase for case-insensitive search
-
+      const searchTextLc = searchText?.toLowerCase();
       return arrayOfObjects.filter((obj) => {
-        for (const key in obj) {
-          if (obj[key] && obj[key].toString().toLowerCase().includes(searchText)) {
-            return true; // Object contains a property with a matching value
-          }
-        }
-        return false; // No matching properties found in the object
+        return obj.productName?.toLowerCase()?.includes(searchTextLc) ||
+          obj.description?.toLowerCase()?.includes(searchTextLc);
       });
     }
+
+    onMounted(() => {
+      searchInput.value = route.query.searchInput
+    })
 
     return {
       routeMeTo,
